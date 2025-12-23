@@ -1,0 +1,21 @@
+variables:
+    {dondur::active} = false
+
+command /dondur:
+    permission: dondur.admin
+    trigger:
+        if {dondur::active} is true:
+            set {dondur::active} to false
+            broadcast "&a✅ Tüm oyuncular artık serbest!"
+        else:
+            set {dondur::active} to true
+            broadcast "&c⛔ Tüm oyuncular donduruldu!"
+            loop all players:
+                play sound "entity.tnt.primed" with volume 1 and pitch 1 to loop-player
+
+on player move:
+    if {dondur::active} is true:
+        if player is not op:
+            cancel event
+            send title "&4⛔&7(Hareket edemezsin)&4⛔" to player
+            play sound "entity.villager.no" with volume 1 and pitch 1 to player
